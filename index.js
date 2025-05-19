@@ -33,6 +33,11 @@ async function run() {
     const userColl = client.db('userManagementDB').collection('userManagements');
 
 
+    app.get('/users', async(req, res) => {
+        const result = await userColl.find().toArray();
+        res.send(result)
+    })
+
     app.post('/users', async(req, res) => {
         const userData = req.body;
         const result = await userColl.insertOne(userData);
