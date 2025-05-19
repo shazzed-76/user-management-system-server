@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const cors = require("cors");
 const port = process.env.PORT || 3000;
@@ -44,6 +44,19 @@ async function run() {
         res.send(result)
     })
 
+    app.put('/users/:id', async(req, res) => {
+        const id = req.params.id;
+        const updatedData = req.body;
+        const filter = { _id: new ObjectId(id) };
+        const options = { upsert: true }
+        const updatedDoc = {
+            $set: updatedData
+        }
+
+        const result = await userColl.updateOne(filter, updatedDoc, options);
+
+        res.send(result)
+    })
 
 
     // Send a ping to confirm a successful connection
